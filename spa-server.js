@@ -10,7 +10,8 @@ const __dirname = path.dirname(import.meta.filename);
 const app = express();
 
 const router = express.Router();
-const publicPath = process.env.REMIX_APP_BASE_PATH;
+const publicPath = process.env.VITE_APP_BASE_PATH;
+
 router.use(express.static("build/client"));
 // and your app is "just a request handler"
 router.get("*", (req, res) =>
@@ -19,5 +20,5 @@ router.get("*", (req, res) =>
 app.use(publicPath, router);
 
 app.listen(3000, () => {
-  console.log("App listening on http://localhost:3000");
+  console.log("App listening on http://localhost:3000" + publicPath);
 });

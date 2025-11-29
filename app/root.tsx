@@ -14,6 +14,20 @@ import fetchClient from "~/libs/api";
 import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { checkIsLogin } from "./session.client";
 
+if ("serviceWorker" in navigator) {
+  import("workbox-window").then(({ Workbox }) => {
+    const wb = new Workbox(import.meta.env.VITE_APP_BASE_PATH + "sw.js");
+    wb.addEventListener("activated", (event) => {
+      if (event.isUpdate) {
+        // New version just activated → show tiny toast
+        console.log("App updated!");
+        // toast.show('Updated ✓')
+      }
+    });
+    wb.register();
+  });
+}
+
 export async function clientLoader(props: LoaderFunctionArgs) {
   if (checkIsLogin()) {
     // attach the token to the api

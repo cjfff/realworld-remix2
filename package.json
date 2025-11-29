@@ -28,6 +28,7 @@
     "react-dom": "^19.2.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
+    "workbox-window": "^7.4.0",
     "zod": "^4.1.13"
   },
   "devDependencies": {
@@ -52,6 +53,7 @@
     "tailwindcss": "^4.1.17",
     "typescript": "^5.1.6",
     "vite": "^7.1.17",
+    "vite-plugin-pwa": "^1.2.0",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "engines": {
