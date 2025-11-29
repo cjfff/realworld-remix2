@@ -4,25 +4,21 @@ import { omitBy } from "lodash-es";
 import { useFetcher } from "~/hooks/useFetcher";
 import { inputsSchema, type Inputs } from "~/libs/schemas/settings";
 import type { components } from "~/consts/schema";
-import { destroySession, getSession } from "~/session.server";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import fetchClient from "~/libs/api";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ClientActionFunctionArgs } from "@remix-run/react";
 import { useUser } from "~/hooks/useUser";
+import { removeToken } from "~/session.client";
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function clientAction({ request }: ClientActionFunctionArgs) {
   let formData = await request.formData();
   const data = Object.fromEntries(formData);
   const { intent, ...updateData } = data;
 
   switch (intent) {
     case "logout": {
-      const session = await getSession(request.headers.get("Cookie"));
-      return redirect("/", {
-        headers: {
-          "Set-Cookie": await destroySession(session),
-        },
-      });
+      removeToken();
+      return redirect("/");
     }
     case "update": {
       const result = inputsSchema.safeParse(updateData);

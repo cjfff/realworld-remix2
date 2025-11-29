@@ -8,7 +8,7 @@ import { inputsSchema } from "~/libs/schemas/newArticle";
 import { omitBy } from "lodash-es";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   const slug = params.slug;
 
   if (!slug) {
@@ -45,7 +45,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function clientAction({ request, params }: ActionFunctionArgs) {
   let formData = await request.formData();
   const slug = params.slug;
   const data = Object.fromEntries(formData);
@@ -108,7 +108,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default () => {
-  const { article } = useLoaderData<typeof loader>();
+  const { article } = useLoaderData<typeof clientLoader>();
   const { fetcher, isLoading, errors, formState, fieldErrors } =
     useFetcher<components["schemas"]["NewArticle"]>();
 

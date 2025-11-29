@@ -1,9 +1,10 @@
-import { redirect, type ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/react";
 import fetchClient from "~/libs/api";
-import { checkIsLogin } from "~/session.server";
+import { checkIsLogin } from "~/session.client";
 
-export async function action({ request }: ActionFunctionArgs) {
-  if (!(await checkIsLogin(request))) {
+export async function clientAction({ request }: ActionFunctionArgs) {
+  if (!(checkIsLogin())) {
     return redirect("/login");
   }
   let data = await request.json();
@@ -23,6 +24,4 @@ export async function action({ request }: ActionFunctionArgs) {
 
   return redirect("/");
 }
-
-export { loader } from "~/libs/actions";
 export { ErrorBoundary } from "~/root";

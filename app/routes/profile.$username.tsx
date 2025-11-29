@@ -4,9 +4,9 @@ import { Avatar } from "../components/Avatar/index";
 import { useUser } from "~/hooks/useUser";
 import { FollowButton } from "~/components/FollowButton";
 import { Tabs } from "~/components/Tabs";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   const username = params.username;
   const res = await fetchClient.GET("/profiles/{username}", {
     params: {
@@ -21,7 +21,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default () => {
-  const { profile } = useLoaderData<typeof loader>();
+  const { profile } = useLoaderData<typeof clientLoader>();
   const user = useUser();
 
   const tabs = [
@@ -77,15 +77,3 @@ export default () => {
     </div>
   );
 };
-
-export async function action({ request }: ActionFunctionArgs) {
-  let formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  const { intent } = data;
-
-  switch (intent) {
-    default: {
-      throw Error("unknown intent" + intent);
-    }
-  }
-}

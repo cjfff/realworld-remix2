@@ -9,7 +9,7 @@ import Comments from "~/components/ArticleDetail/Comments";
 import { CommentForm } from "~/components/ArticleDetail/CommentForm";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   const slug = params.slug;
 
   if (!slug) {
@@ -49,69 +49,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-// export async function action({ request, params }: Route.ActionArgs) {
-//   let formData = await request.formData();
-//   const slug = params.slug;
-//   const data = Object.fromEntries(formData);
-//   const { tagList, ...updateData } = data as Omit<
-//     components["schemas"]["NewArticle"],
-//     "tagList"
-//   > & {
-//     tagList: string;
-//   };
-//   const result = inputsSchema.safeParse(
-//     omitBy(
-//       {
-//         ...updateData,
-//         tagList: tagList?.split(",").filter(Boolean) || "",
-//       },
-//       (value) => {
-//         if (!value) {
-//           return true;
-//         }
-//         return false;
-//       }
-//     )
-//   );
-
-//   if (!result.success) {
-//     return {
-//       fieldErrors: result.error.flatten().fieldErrors,
-//       formState: updateData,
-//       errors: undefined,
-//     };
-//   }
-
-//   const fetchParams = {
-//     body: {
-//       article: result.data,
-//     },
-//   };
-
-//   const res = await (slug
-//     ? fetchClient.PUT("/articles/{slug}", {
-//         ...fetchParams,
-//         params: {
-//           path: {
-//             slug,
-//           },
-//         },
-//       })
-//     : fetchClient.POST("/articles", fetchParams));
-//   console.log(res, "res");
-//   if (res.error) {
-//     return {
-//       errors: res.error.errors.body,
-//       formState: updateData,
-//     };
-//   }
-
-//   return redirect(`/article/${res.data?.article.slug}`);
-// }
-
 export default () => {
-  const { article, comments, contentHtml } = useLoaderData<typeof loader>();
- 
+  const { article, comments, contentHtml } =
+    useLoaderData<typeof clientLoader>();
+
   return (
     <div className="article-page">
       <div className="banner">

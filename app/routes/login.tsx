@@ -5,17 +5,18 @@ import fetchClient from "~/libs/api";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { useFetcher } from "~/hooks/useFetcher";
 import type { components } from "~/consts/schema";
-import { checkIsLogin, commitSession, getSession } from "~/session.server";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { checkIsLogin, setToken } from "~/session.client";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  if (await checkIsLogin(request)) {
+export async function clientLoader(props: LoaderFunctionArgs) {
+  if (checkIsLogin()) {
     return redirect("/");
   }
+
+  return null;
 }
 
-
-export async function action({ request }: ActionFunctionArgs) {
+export async function clientAction({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
   const result = inputsSchema.safeParse(data);
 
@@ -38,14 +39,9 @@ export async function action({ request }: ActionFunctionArgs) {
     };
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
-  session.set("token", res.data?.user.token!);
+  setToken(res.data?.user.token!);
 
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
+  return redirect("/");
 }
 
 export default () => {

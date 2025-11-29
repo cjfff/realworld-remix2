@@ -3,13 +3,13 @@ import fetchClient from "~/libs/api";
 import Articles from "~/components/Articles";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function clientLoader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
 
   const searchParams = Object.fromEntries(url.searchParams.entries()) as {
     page: string;
     size: string;
-    tag: string
+    tag: string;
   };
 
   const page = searchParams?.page || 1;
@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       query: {
         limit: Number(size),
         offset: Number(size) * (Number(page) - 1),
-        tag
+        tag,
       },
     },
   });
@@ -39,7 +39,7 @@ export default () => {
     size,
     articlesCount: total = 0,
     articles = [],
-  } = useLoaderData<typeof loader>();
+  } = useLoaderData<typeof clientLoader>();
 
   return <Articles total={total} articles={articles} page={page} size={size} />;
 };

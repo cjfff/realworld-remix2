@@ -3,7 +3,7 @@ import fetchClient from "~/libs/api";
 import Articles from "~/components/Articles";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   const username = params.username;
   const url = new URL(request.url);
 
@@ -37,7 +37,7 @@ export default () => {
     size,
     articlesCount: total = 0,
     articles = [],
-  } = useLoaderData<typeof loader>();
+  } = useLoaderData<typeof clientLoader>();
 
   return <Articles total={total} articles={articles} page={page} size={size} />;
 };

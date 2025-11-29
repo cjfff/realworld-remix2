@@ -8,7 +8,7 @@ import Tags from "~/components/Tags";
 import TagLoading from "./TagLoading";
 import { LoaderFunctionArgs } from "@remix-run/node";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function clientLoader({ request }: LoaderFunctionArgs) {
   const res = await fetchClient.GET("/tags");
 
   return {
@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Home() {
   const user = useUser();
 
-  const { tags } = useLoaderData<typeof loader>();
+  const { tags } = useLoaderData<typeof clientLoader>();
   const { pathname } = useLocation();
 
   const tabs = [
@@ -72,9 +72,4 @@ export default function Home() {
       </div>
     </div>
   );
-}
-
-
-export function HydrateFallback() {
-  return <p>Loading Articles...</p>;
 }

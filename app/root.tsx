@@ -11,28 +11,20 @@ import "./app.css";
 import { Nav } from "~/components/NavHeader";
 import { Footer } from "~/components/Footer";
 import fetchClient from "~/libs/api";
-import { destroySession, getSession } from "./session.server";
 import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { checkIsLogin } from "./session.client";
 
-
-export async function loader({ request, context }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-
-  if (session.has("token")) {
+export async function clientLoader(props: LoaderFunctionArgs) {
+  if (checkIsLogin()) {
     // attach the token to the api
-    fetchClient.token = session.get("token") || "";
     try {
-      const user = await fetchClient.GET("/user");
-      return { user: user.data?.user };
+      const userRes = await fetchClient.GET("/user");
+      const user = userRes.data?.user;
+      return { user };
     } catch (error) {
-      fetchClient.token = undefined;
-      return new Response(JSON.stringify({ user: undefined }), {
-        status: 200,
-        headers: {
-          "Content-Type": "applicaiton/json",
-          "Set-Cookie": await destroySession(session),
-        },
-      });
+      return {
+        user: undefined,
+      };
     }
   }
 
