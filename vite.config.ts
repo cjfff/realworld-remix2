@@ -1,20 +1,20 @@
-import 'dotenv/config'
+import "dotenv/config";
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from "vite-plugin-pwa";
 
-const BUILD_VERSION = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8) ||
-                     process.env.CF_PAGES_COMMIT_SHA?.slice(0, 8) ||
-                     Date.now()
+const BUILD_VERSION =
+  process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8) ||
+  process.env.CF_PAGES_COMMIT_SHA?.slice(0, 8) ||
+  Date.now();
 
 declare module "@remix-run/node" {
   interface Future {
     v3_singleFetch: true;
   }
 }
-
 
 export default defineConfig({
   base: process.env.VITE_APP_BASE_PATH,
@@ -33,13 +33,13 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     VitePWA({
-      registerType: 'autoUpdate',           // ← important
-      injectRegister: null,               // or 'script' / 'inline'
+      registerType: "autoUpdate", // ← important
+      injectRegister: null, // or 'script' / 'inline'
 
       // THIS IS THE 2025 TRICK — unique cache name per build
       workbox: {
         // Option A — the cleanest (recommended)
-        cacheId: `realworld-app-${BUILD_VERSION}`,   // ← forces brand-new cache every deploy
+        cacheId: `realworld-app-${BUILD_VERSION}`, // ← forces brand-new cache every deploy
 
         // Option B — manual cache names (same effect)
         // globPatterns: ['**/*.{js,css,html,woff2,png,jpg,svg}'],
@@ -51,14 +51,28 @@ export default defineConfig({
 
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com/,
-            handler: 'StaleWhileRevalidate',
+            urlPattern: /^https:\/\/fonts\.*\.com/,
+            handler: "StaleWhileRevalidate",
             options: {
-              cacheName: 'google-fonts'
-            }
-          }
+              cacheName: "google-fonts",
+            },
+          },
+          {
+            urlPattern: /^https?:\/\/demo\.productionready\.io\/main\.css/,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "demo-css",
+            },
+          },
+          {
+            urlPattern: /^https:\/\/code\.ionicframework\.com/,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "demo-icon",
+            },
+          },
         ],
-        globPatterns: ['**/*.{js,css,ico,svg,png,jpg}'],
+        globPatterns: ["**/*.{js,css,ico,svg,png,jpg}"],
         navigateFallback: null,
         // navigateFallbackDenylist: [/^\/api/],
 
@@ -69,15 +83,15 @@ export default defineConfig({
       },
 
       manifest: {
-        name: 'My Awesome App',
-        short_name: 'MyApp',
-        start_url: '/',
-        display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#000000',
+        name: "My Awesome App",
+        short_name: "MyApp",
+        start_url: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#000000",
         icons: [
-          { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+          { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
         ],
       },
     }),
@@ -87,11 +101,10 @@ export default defineConfig({
     // Vite already does [hash] filenames by default → perfect for Workbox
     rollupOptions: {
       output: {
-        manualChunks: id => {
-          if (id.includes('node_modules')) return 'vendor'
+        manualChunks: (id) => {
+          if (id.includes("node_modules")) return "vendor";
         },
       },
     },
   },
 });
-
