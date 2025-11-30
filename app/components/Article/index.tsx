@@ -16,13 +16,13 @@ export const Article = ({
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <a href={profileHref}>
+        <Link to={profileHref}>
           <Avatar src={article.author.image} />
-        </a>
+        </Link>
         <div className="info">
-          <a href={profileHref} className="author">
+          <Link to={profileHref} className="author">
             {article.author.username}
-          </a>
+          </Link>
           <span className="date">
             {dayjs(article.createdAt).format("MMMM D")}th
           </span>
