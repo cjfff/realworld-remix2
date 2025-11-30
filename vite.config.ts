@@ -15,6 +15,7 @@ declare module "@remix-run/node" {
   }
 }
 
+
 export default defineConfig({
   base: process.env.VITE_APP_BASE_PATH,
   plugins: [
@@ -33,7 +34,7 @@ export default defineConfig({
     tsconfigPaths(),
     VitePWA({
       registerType: 'autoUpdate',           // ← important
-      injectRegister: 'auto',               // or 'script' / 'inline'
+      injectRegister: null,               // or 'script' / 'inline'
 
       // THIS IS THE 2025 TRICK — unique cache name per build
       workbox: {
@@ -48,9 +49,22 @@ export default defineConfig({
         // Let Vite’s [hash] filenames do the revisioning
         dontCacheBustURLsMatching: /\.\w{8,}\./,
 
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts'
+            }
+          }
+        ],
+        globPatterns: ['**/*.{js,css,ico,svg,png,jpg}'],
+        navigateFallback: null,
+        // navigateFallbackDenylist: [/^\/api/],
+
         // Optional but recommended
-        skipWaiting: true,
-        clientsClaim: true,
+        skipWaiting: false,
+        clientsClaim: false,
         cleanupOutdatedCaches: true,
       },
 
