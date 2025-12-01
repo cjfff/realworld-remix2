@@ -16,7 +16,7 @@ This application uses modern web technologies and leverages Remix's server + cli
 
 ### Core Technologies
 
-* **Remix v3** – Framework mode with Vite, loader/action data APIs, SSR, and file-based routing
+* **Remix v2** – Framework mode with Vite, loader/action data APIs, SSR, and file-based routing
 * **TypeScript** – End-to-end type safety (components, loaders, API wrappers)
 * **Tailwind CSS v4** – Utility-first styling via the new `@tailwindcss/vite` plugin
 * **OpenAPI tooling** – `openapi-typescript` + `openapi-fetch` for strongly typed API calls
