@@ -21,7 +21,6 @@ This application uses modern web technologies and leverages Remix's server + cli
 * **Tailwind CSS v4** – Utility-first styling via the new `@tailwindcss/vite` plugin
 * **OpenAPI tooling** – `openapi-typescript` + `openapi-fetch` for strongly typed API calls
 * **Express** – Production server with compression and static asset serving
-* **PWA Support** – Service worker and web manifest for offline capabilities
 
 ### Key Architectural Patterns
 
@@ -97,7 +96,6 @@ app/
 * ✅ **Pagination** – Paginated article feeds
 * ✅ **Tags** – Filter articles by tag
 * ✅ **Feeds** – Your feed / Global feed
-* ✅ **PWA** – Progressive Web App with service worker support
 
 ## Getting Started
 
@@ -162,7 +160,6 @@ pnpm run start
 * **State Management**: Route loaders/actions and lightweight hooks in `app/hooks`
 * **Authentication**: JWT via secure cookies + API middleware token forwarding
 * **Server**: Express with compression and static asset serving
-* **PWA**: Service worker and web manifest for offline support
 
 ## Troubleshooting
 
