@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { vitePlugin as remix } from "@remix-run/dev";
-import { defineConfig } from "vite";
+import { defineConfig, PluginOption } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -19,7 +19,7 @@ declare module "@remix-run/node" {
 export default defineConfig({
   base: process.env.VITE_APP_BASE_PATH,
   plugins: [
-    tailwindcss(),
+    tailwindcss() as PluginOption,
     remix({
       basename: process.env.VITE_APP_BASE_PATH,
       ssr: false,
@@ -31,7 +31,7 @@ export default defineConfig({
         v3_lazyRouteDiscovery: true,
       },
     }),
-    tsconfigPaths(),
+    tsconfigPaths() as PluginOption,
     VitePWA({
       registerType: "autoUpdate", // ← important
       injectRegister: null, // or 'script' / 'inline'
@@ -94,7 +94,7 @@ export default defineConfig({
           { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
         ],
       },
-    }),
+    }) as PluginOption,
   ],
 
   build: {
